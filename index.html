@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Calculator</title>
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+      integrity="sha384-ezHYg5FPU8AAeZLQQlWb7R2XMTvm1cmMlOgtOrTKBQUa6IYYqRlW4dVoZGVjUEhDP"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"
+    />
+
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main>
+      <div class="container">
+        <div class="box">
+          <div class="inputted-numbers" id="inputtedNumbers" contenteditable="false"></div>
+
+          <span class="numbers zero" onclick="appendToInput('0')">0</span>
+          <span class="numbers one" onclick="appendToInput('1')">1</span>
+          <span class="numbers two" onclick="appendToInput('2')">2</span>
+          <span class="numbers three" onclick="appendToInput('3')">3</span>
+          <span class="numbers four" onclick="appendToInput('4')">4</span>
+          <span class="numbers five" onclick="appendToInput('5')">5</span>
+          <span class="numbers six" onclick="appendToInput('6')">6</span>
+          <span class="numbers seven" onclick="appendToInput('7')">7</span>
+          <span class="numbers eight" onclick="appendToInput('8')">8</span>
+          <span class="numbers nine" onclick="appendToInput('9')">9</span>
+
+          <span
+            class="dot"
+            style="font-size: 0.5rem"
+            onclick="appendToInput('.')"
+            ><i class="fas fa-circle"></i
+          ></span>
+
+          <span class="operations c" onclick="clearInput()"
+            ><i class="fas fa-c"></i
+          ></span>
+          <span class="operations times" onclick="appendToInput('*')"
+            ><i class="fas fa-times"></i
+          ></span>
+          <span class="operations plus" onclick="appendToInput('+')"
+            ><i class="fas fa-plus"></i
+          ></span>
+          <span class="operations minus" onclick="appendToInput('-')"
+            ><i class="fas fa-minus"></i
+          ></span>
+          <span class="operations equals" onclick="calculateResult()"
+            ><i class="fas fa-equals"></i
+          ></span>
+          <span class="operations backspace" onclick="backspace()"
+            ><i class="fas fa-backspace"></i
+          ></span>
+          <span class="operations divide" onclick="appendToInput('/')"
+            ><i class="fas fa-divide"></i
+          ></span>
+        </div>
+      </div>
+    </main>
+
+    <script>
+        let inputElement = document.getElementById("inputtedNumbers");
+        let errorOccurred = false; // Track if an error occurred
+        let numberEntered = false; // Track if a number has been entered
+    
+        function appendToInput(value) {
+            if (errorOccurred) {
+                // Clear the error message if an error occurred
+                clearInput();
+                errorOccurred = false;
+            }
+    
+            inputElement.textContent += value;
+            numberEntered = true;
+            enableDisableOperations();
+        }
+    
+        function clearInput() {
+            inputElement.textContent = "";
+            errorOccurred = false; // Reset the error state
+            numberEntered = false; // Reset the number entered state
+            enableDisableOperations();
+        }
+    
+        function backspace() {
+            inputElement.textContent = inputElement.textContent.slice(0, -1);
+            errorOccurred = false; // Reset the error state
+            enableDisableOperations();
+        }
+    
+        function calculateResult() {
+            if (numberEntered) {
+                try {
+                    inputElement.textContent = eval(inputElement.textContent);
+                    errorOccurred = false; // Reset the error state
+                } catch (error) {
+                    inputElement.textContent = "Error";
+                    errorOccurred = true;
+                }
+            }
+        }
+    
+        function enableDisableOperations() {
+            const operationButtons = document.querySelectorAll(".operations");
+            operationButtons.forEach(button => {
+                button.disabled = !numberEntered;
+            });
+        }
+
+        // Add focus event listener for inputted-numbers
+        inputElement.addEventListener("focus", function() {
+            this.style.borderColor = "#0072c5";
+        });
+
+        // Add blur event listener for inputted-numbers
+        inputElement.addEventListener("blur", function() {
+            this.style.borderColor = "initial";
+        });
+    </script>
+
+  </body>
+</html>
